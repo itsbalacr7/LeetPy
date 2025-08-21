@@ -1,0 +1,48 @@
+ #apply discount on shipping 
+def invoice(price_per_unit, quantity, tax_rate=0.05, discount=0.0):
+    """
+    Compute the cost breakdown for an order.
+    Returns a 3-tuple: (subtotal, tax, grand_total).
+    """
+    subtotal = price_per_unit * quantity           # product cost before extras
+    tax       = subtotal * tax_rate                # sales-tax amount
+    total     = subtotal + tax - discount          # final amount due
+    return subtotal, tax, total                    # ← handed back to caller
+
+# ------------------ caller code ------------------
+
+sub, tax, grand_total = invoice(499, 3, discount=50)   # store each piece
+print(f"Subtotal:   ₹{sub:,.2f}")
+print(f"Tax:        ₹{tax:,.2f}")
+print(f"Grand total:₹{grand_total:,.2f}")
+
+# reuse the saved result later
+def invoice(price_per_unit, quantity, tax_rate=0.05, discount=0.0):
+    """
+    Return (subtotal, tax, grand_total, shipping).
+    Shipping is 0 if grand_total < 1000, otherwise 500.
+    """
+    subtotal = price_per_unit * quantity
+    tax       = subtotal * tax_rate
+    grand_total = subtotal + tax - discount
+
+    # ---------- shipping rule you requested ----------
+    if grand_total < 1_000:          # free shipping threshold
+        shipping = 0
+    else:
+        shipping = 500               # flat ₹500 charge
+    # --------------------------------------------------
+
+    return subtotal, tax, grand_total, shipping
+
+
+# ---------------- caller code ----------------
+sub, tax, total, ship = invoice(499, 3, discount=50)
+
+print(f"Subtotal:   ₹{sub:,.2f}")
+print(f"Tax:        ₹{tax:,.2f}")
+print(f"Grand total:₹{total:,.2f}")
+print(f"Shipping:   ₹{ship:,.2f}")
+
+amount_due = total + ship
+print(f"Amount due: ₹{amount_due:,.2f}")
