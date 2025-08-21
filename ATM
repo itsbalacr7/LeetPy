@@ -1,0 +1,232 @@
+
+Write a console program that keeps running in a `while True` loop until the user chooses Exit.
+The ATM must support four numbered menu options:
+	1.	Check Balance
+	2.	Deposit Cash
+	3.	Withdraw Cash
+	4.	Exit
+Functional-requirements
+	•	Start with a balance of ₹ 10 000.
+	•	After every action (except Exit) redisplay the menu.
+	•	Withdraw rules – Ask for an amount. – Reject non-numeric input or amounts not in multiples of ₹100. – Reject withdrawals that would make the balance go below ₹2 000 (minimum balance). – Track max 3 failed-withdrawal attempts per session; lock withdrawals if the user exceeds this, but allow Deposits and Balance checks.
+	•	Deposit rules – Accept only positive numeric amounts. – Ignore invalid input without counting it as a failed withdrawal.
+	•	Exit terminates the `while True` loop and prints a goodbye message with the final balance.
+Extra-credit (optional)
+	•	Give the user a mini-statement (list of the last five transactions) when they Exit.
+	•	Implement a simple “PIN check” before showing the main menu; allow 3 tries, then abort the program.
+'''
+
+balance = "10,000"
+pin = "123"
+remaining_balance = " "
+pin_attempts = "0"
+withdrawl_attempts = "0"
+max_attempts = "3"
+withdraw = " "
+
+While in i attempts < max_attempts:   
+    entered_pin = input("enter the pin: ")
+    pin_attempts = "1"
+
+    if pin == entered_pin: 
+        print ("password accepted")
+    pin_attempts += 1
+    else:
+        print(i)
+    
+
+    if balance > 2000:
+        withdraw = input("enter the withdrawl amount: ")
+            if withdraw % 10 == 0 and withdraw = range(100000000000)
+            ELSE:
+                print("i")
+        withdrawl_attempts < max_attempts
+        withidrawl_attempts = "1" 
+        balance -= withdraw  
+        print("you get the money")
+    withdrawl_attempts += 1
+    ELSE:
+        print(i)
+    
+    if deposite > 0 and != range (a-z)
+        balance += deposite
+        print ("depisite sucess")
+        else ("ty again")
+            print(i)
+    ELSE:
+        print (i)
+
+    IF exit
+        print ("good bye")
+
+print ("too many attempts")
+
+## Corrected Version ##
+
+# Complete ATM Console Program
+# This program implements all the required features including PIN verification and mini-statement
+
+def atm_program():
+    # Initialize variables
+    balance = 10000  # Starting balance in rupees
+    correct_pin = "1234"  # Default PIN (you can change this)
+    max_pin_attempts = 3
+    max_withdrawal_attempts = 3
+    withdrawal_attempts = 0
+    transaction_history = []  # For mini-statement
+    
+    print("=" * 50)
+    print("          WELCOME TO ATM SERVICE")
+    print("=" * 50)
+    
+    # PIN verification with 3 attempts (Extra credit feature)
+    pin_attempts = 0
+    while pin_attempts < max_pin_attempts:
+        entered_pin = input("Enter your 4-digit PIN: ")
+        pin_attempts += 1
+        
+        if entered_pin == correct_pin:
+            print("PIN accepted. Access granted!\n")
+            break
+        else:
+            remaining_attempts = max_pin_attempts - pin_attempts
+            if remaining_attempts > 0:
+                print(f"Incorrect PIN. {remaining_attempts} attempt(s) remaining.\n")
+            else:
+                print("Too many incorrect PIN attempts. Access denied.")
+                print("Your card has been blocked. Please contact your bank.")
+                return
+    
+    # Main ATM loop - keeps running until user chooses Exit
+    while True:
+        # Display menu after every action (except Exit)
+        print("=" * 40)
+        print("           ATM MAIN MENU")
+        print("=" * 40)
+        print("1. Check Balance")
+        print("2. Deposit Cash")
+        print("3. Withdraw Cash")
+        print("4. Exit")
+        print("-" * 40)
+        
+        # Get user choice
+        try:
+            choice = input("Please select an option (1-4): ").strip()
+        except KeyboardInterrupt:
+            print("\nProgram interrupted. Goodbye!")
+            break
+        
+        if choice == "1":
+            # Option 1: Check Balance
+            print(f"\nYour current balance is: â‚¹{balance:,}")
+            transaction_history.append(f"Balance inquiry: â‚¹{balance:,}")
+            
+        elif choice == "2":
+            # Option 2: Deposit Cash
+            try:
+                deposit_input = input("Enter deposit amount: â‚¹")
+                
+                # Check if input is numeric
+                deposit_amount = float(deposit_input)
+                
+                # Validate deposit amount (must be positive)
+                if deposit_amount <= 0:
+                    print("Invalid amount. Please enter a positive value.")
+                elif not deposit_amount.is_integer():
+                    print("Invalid amount. Please enter whole numbers only.")
+                else:
+                    deposit_amount = int(deposit_amount)
+                    balance += deposit_amount
+                    print(f"â‚¹{deposit_amount:,} deposited successfully!")
+                    print(f"Your new balance is: â‚¹{balance:,}")
+                    transaction_history.append(f"Deposit: +â‚¹{deposit_amount:,}")
+                    
+            except ValueError:
+                # Ignore invalid input without counting as failed withdrawal
+                print("Invalid input. Please enter numeric values only.")
+                
+        elif choice == "3":
+            # Option 3: Withdraw Cash
+            # Check if withdrawals are locked due to failed attempts
+            if withdrawal_attempts >= max_withdrawal_attempts:
+                print("Withdrawal service is temporarily locked due to multiple failed attempts.")
+                print("You can still check balance and make deposits.")
+                continue
+                
+            try:
+                withdraw_input = input("Enter withdrawal amount: â‚¹")
+                
+                # Check if input is numeric
+                withdraw_amount = float(withdraw_input)
+                
+                # Validate withdrawal amount
+                if withdraw_amount <= 0:
+                    print("Invalid amount. Please enter a positive value.")
+                    withdrawal_attempts += 1
+                elif not withdraw_amount.is_integer():
+                    print("Invalid amount. Please enter whole numbers only.")
+                    withdrawal_attempts += 1
+                elif int(withdraw_amount) % 100 != 0:
+                    print("Invalid amount. Withdrawal amount must be in multiples of â‚¹100.")
+                    withdrawal_attempts += 1
+                elif balance - int(withdraw_amount) < 2000:
+                    print("Insufficient funds. Minimum balance of â‚¹2,000 must be maintained.")
+                    print(f"Your current balance: â‚¹{balance:,}")
+                    print(f"Maximum withdrawable amount: â‚¹{balance - 2000:,}")
+                    withdrawal_attempts += 1
+                else:
+                    # Successful withdrawal
+                    withdraw_amount = int(withdraw_amount)
+                    balance -= withdraw_amount
+                    print(f"â‚¹{withdraw_amount:,} withdrawn successfully!")
+                    print(f"Please collect your cash.")
+                    print(f"Your remaining balance is: â‚¹{balance:,}")
+                    transaction_history.append(f"Withdrawal: -â‚¹{withdraw_amount:,}")
+                    
+            except ValueError:
+                # Reject non-numeric input and count as failed attempt
+                print("Invalid input. Please enter numeric values only.")
+                withdrawal_attempts += 1
+                
+            # Check if withdrawal attempts exceeded after each failed attempt
+            if withdrawal_attempts >= max_withdrawal_attempts:
+                print(f"\nWarning: You have reached the maximum number of failed withdrawal attempts ({max_withdrawal_attempts}).")
+                print("Withdrawal service is now locked for this session.")
+                print("You can still check your balance and make deposits.\n")
+                
+        elif choice == "4":
+            # Option 4: Exit - Terminate the while True loop
+            print("\n" + "=" * 50)
+            print("Thank you for using our ATM service!")
+            print(f"Your final balance is: â‚¹{balance:,}")
+            
+            # Mini-statement (Extra credit feature - last 5 transactions)
+            if transaction_history:
+                print("\nMini-Statement (Last 5 transactions):")
+                print("-" * 40)
+                recent_transactions = transaction_history[-5:]  # Get last 5 transactions
+                for i, transaction in enumerate(recent_transactions, 1):
+                    print(f"{i}. {transaction}")
+            else:
+                print("\nNo transactions performed in this session.")
+                
+            print("=" * 50)
+            print("Have a great day!")
+            break  # Exit the while True loop
+            
+        else:
+            print("Invalid option. Please select 1, 2, 3, or 4.")
+        
+        print()  # Add spacing between menu iterations
+
+# Main execution
+if __name__ == "__main__":
+    try:
+        atm_program()
+    except KeyboardInterrupt:
+        print("\n\nProgram terminated by user. Goodbye!")
+    except Exception as e:
+        print(f"\nAn unexpected error occurred: {e}")
+        print("Please restart the program.")
+
+
